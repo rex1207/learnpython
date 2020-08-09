@@ -1,2 +1,2 @@
 # learnpython
-Teacher students to learn python
+Teach students to learn python3.  
