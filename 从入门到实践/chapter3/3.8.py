@@ -1,0 +1,18 @@
+places=['hainan','malaixiya','beiji','nanji','shamo']
+print(places)
+print(sorted(places))
+print(places)
+print(sorted(places, reverse=True))
+print(places)
+# for place in reversed(sorted(places)):
+#     print(place)
+places.reverse()
+print(places)
+places.reverse()
+print(places)
+places.sort(reverse=True)
+print(places)
+places.sort()
+print(places)
+print(len(places))
+print(places[5])
