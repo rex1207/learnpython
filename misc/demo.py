@@ -8,7 +8,8 @@ python flask_matplotlib.py
 """
 import io
 import random
-from flask import Flask, Response, request
+from flask import Flask, Response, request, render_template
+from flask import send_file
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 from matplotlib.backends.backend_svg import FigureCanvasSVG
 import requests
@@ -17,7 +18,9 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import collections
 
+
 app = Flask(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 
 def get_vote(vote_id=1040):
@@ -32,6 +35,7 @@ def get_vote(vote_id=1040):
     # print(data)
     return data
 
+
 @app.route("/")
 def index():
     """ Returns html with the img tag for your plot.
@@ -43,21 +47,18 @@ def index():
     <h2>Random data with num_x_points={num_x_points}</h2>
     <form method=get action="/">
     </form>
-    <h3>Plot as a SVG</h3>
-    <img src="/matplot-as-image-{num_x_points}.png"
+    <img src="./static/test.png"
          alt="random points as png"
          height="500"
     >
-    <img src="/matplot-as-image-{num_x_points}.svg"
-         alt="random points as svg"
-         height="500"
-    >
+    
     """
     # from flask import render_template
     # return render_template("yourtemplate.html", num_x_points=num_x_points)
 
 
-@app.route("/matplot-as-image-<int:num_x_points>.png")
+# @app.route("/matplot-as-image-<int:num_x_points>.png")
+@app.route("/plot")
 def plot_png(num_x_points=50):
     """ renders the plot on the fly.
     """
@@ -114,15 +115,21 @@ def plot_png(num_x_points=50):
             plt.text(diff, c - gap, b, bbox=dict(facecolor='red', alpha=0.5))
         elif '编号3' in a or '编号6' in a:
             print(num_10, b)
-            msg = '距离第10名还差' + str(num_10 - b)
+            if num_10 > b:
+                msg = '距离第10名还差' + str(num_10 - b)
+            else:
+                msg = '领先第10名' + str(b - num_10)
             plt.text(diff, c - gap, str(b) + msg, bbox=dict(facecolor='red', alpha=0.5))
         else:
             plt.text(diff, c - gap, b, ha='center', va='bottom', fontsize=8)
         c += 1
     output = io.BytesIO()
-    FigureCanvasAgg(fig).print_png(output, bbox_inches = 'tight')
-    return Response(output.getvalue(), mimetype="image/png")
-
+    # FigureCanvasAgg(fig).print_png(output, bbox_inches = 'tight')
+    plt.savefig('./static/test.png', bbox_inches='tight')
+    # return Response(output.getvalue(), mimetype="image/png")
+    # return send_file('test.png', mimetype='image/png')
+    return render_template('plot.html', name = 'new_plot',
+                           url ='./static/test.png')
 
 # @app.route("/matplot-as-image-<int:num_x_points>.svg")
 # def plot_svg(num_x_points=50):
