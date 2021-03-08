@@ -156,7 +156,7 @@ def low_pb_ratio():
 if __name__ == '__main__':
     df = get_self_select()
     print(df)
-    # df_zz800 = pd.read_excel("D://workspace//value//中证800.xls")
+    # df_zz800 = pd.read_excel("D://workspace//value//zz800.xls")
     # print(df_zz800)
     # print(df_zz800.columns)
     # columns = ['symbol', 'name', 'cumulative_returns', 'annual_yield']

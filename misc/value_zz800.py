@@ -5,13 +5,17 @@ df.columns = ['code', 'name', 'peg1', 'peg2', 'peg3', 'pe1', 'pe2', 'pe3',
               'annual_yield', 'vs_hs300_this_year', 'vs_hs300_1_year',
               'record_high', 'record_low', 'stage_high', 'stage_low',
               'ma_250', 'current_price', 'debt_to_assets_ratio', 'roe',
-              'goodwill', 'net_asset', 'rating_count']
-print(df.dtypes)
+              'goodwill', 'net_asset', 'rating_count', 'impawn_rate']
+print(df)
 # 将str的列转换为数值类型
 df = df.apply(pd.to_numeric, errors='ignore')
 # df = df.fillna(value={'goodwill': 0, 'rating_count': 0})
 # 替换某些列异常数据为0
-df = df.replace({'goodwill': '——', 'rating_count': '——'}, 0)
+df = df.replace({'goodwill': '——', 'rating_count': '——', 'impawn_rate': '——'}, 0)
+# 替换某些列异常数据为9999
+df = df.replace({'peg1': '——', 'peg2': '——', 'peg3': '——'}, 9999)
+df = df.replace({'pe1': '——', 'pe2': '——', 'pe3': '——'}, 9999)
+print(df)
 print(df.dtypes)
 df = df[df['debt_to_assets_ratio'] > 0.2]
 df['goodwill_net_asset_ratio'] = \
@@ -26,12 +30,21 @@ print(df.loc[df['ma_250_ratio'] > 1])
 # 商誉高于20%的
 print(df.loc[df['goodwill_net_asset_ratio'] > 0.2])
 # ROE高于10&年化收益率高于10%的
-print(df[(df['roe'] > 10)
+candidate = df[(df['roe'] > 10)
          & (df['annual_yield'] > 10)
+         & (df['annual_yield'] < 50)
+         & (df['stage_high'] == '是')
+         & (df['peg2'] < 1.5)
+         & (df['peg3'] < 1.2)
+         & (df['pe2'] < 50)
+         & (df['pe3'] < 30)
          & (df['goodwill_net_asset_ratio'] < 0.2)
+         & (df['impawn_rate'] < 20)
          & (df['rating_count'] > 0)
          & (df['ma_250_ratio'] > 1)
-         & (df['ma_250_ratio'] < 1.5)])
+         & (df['ma_250_ratio'] < 1.5)]
+print(candidate)
+print(candidate.to_dict('records'))
 # stocks = []
 # hot_stocks = []
 # for index, row in df.iterrows():
