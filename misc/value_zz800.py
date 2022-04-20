@@ -1,5 +1,5 @@
 import pandas as pd
-df = pd.read_excel('zz800.xls', keep_default_na=False)
+df = pd.read_excel('zz800_0505.xlsx', keep_default_na=False)
 # 重设列名
 df.columns = ['code', 'name', 'peg1', 'peg2', 'peg3', 'pe1', 'pe2', 'pe3',
               'annual_yield', 'vs_hs300_this_year', 'vs_hs300_1_year',
@@ -81,4 +81,4 @@ print(candidate.to_dict('records'))
 # print(len(hot_stocks))
 # df = pd.DataFrame(stocks)
 # print(df)
-# df.to_excel("output.xlsx", index=False)
+df.to_excel("output.xlsx", index=False)

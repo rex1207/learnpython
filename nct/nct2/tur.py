@@ -1,0 +1,10 @@
+import turtle as t
+t.setup(width=1000, height=500, startx=0, starty=0)
+t.fillcolor('green')
+t.begin_fill()
+t.left(90)
+t.shape('triangle')
+t.forward(100)
+t.circle(100,180)
+t.end_fill()
+t.done()
